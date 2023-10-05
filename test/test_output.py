@@ -257,6 +257,91 @@ def test_simple_with_sep_line():
     assert_equal(expected, result)
 
 
+def test_separating_line_simple_format():
+    "Output: grid with separating line"
+    expected = "\n".join(
+        [
+            "strings      numbers",
+            "---------  ---------",
+            "spam         41.9999",
+            "---------  ---------",
+            "eggs        451",
+        ]
+    )
+    result = tabulate(_test_table_with_sep_line, _test_table_headers, tablefmt="simple")
+    assert_equal(expected, result)
+
+
+def test_separating_line_grid_format():
+    "Output: grid with separating line"
+    expected = "\n".join(
+        [
+            "+-----------+-----------+",
+            "| strings   |   numbers |",
+            "+===========+===========+",
+            "| spam      |   41.9999 |",
+            "+===========+===========+",
+            "| eggs      |  451      |",
+            "+-----------+-----------+",
+        ]
+    )
+    result = tabulate(_test_table_with_sep_line, _test_table_headers, tablefmt="grid")
+    assert_equal(expected, result)
+
+
+def test_separating_line_fancy_grid_format():
+    "Output: grid with separating line"
+    expected = "\n".join(
+        [
+            "╒═══════════╤═══════════╕",
+            "│ strings   │   numbers │",
+            "╞═══════════╪═══════════╡",
+            "│ spam      │   41.9999 │",
+            "╞═══════════╪═══════════╡",
+            "│ eggs      │  451      │",
+            "╘═══════════╧═══════════╛",
+        ]
+    )
+    result = tabulate(
+        _test_table_with_sep_line, _test_table_headers, tablefmt="fancy_grid"
+    )
+    assert_equal(expected, result)
+
+
+def test_separating_line_outline_format():
+    "Output: grid with separating line"
+    expected = "\n".join(
+        [
+            "+-----------+-----------+",
+            "| strings   |   numbers |",
+            "+===========+===========+",
+            "| spam      |   41.9999 |",
+            "+===========+===========+",
+            "| eggs      |  451      |",
+            "+-----------+-----------+",
+        ]
+    )
+    result = tabulate(
+        _test_table_with_sep_line, _test_table_headers, tablefmt="outline"
+    )
+    assert_equal(expected, result)
+
+
+def test_separating_line_pipe_format():
+    "Output: grid with separating line"
+    expected = "\n".join(
+        [
+            "| strings   |   numbers |",
+            "|:----------|----------:|",
+            "| spam      |   41.9999 |",
+            "|:----------|----------:|",
+            "| eggs      |  451      |",
+        ]
+    )
+    result = tabulate(_test_table_with_sep_line, _test_table_headers, tablefmt="pipe")
+    assert_equal(expected, result)
+
+
 def test_readme_example_with_sep():
     table = [["Earth", 6371], ["Mars", 3390], SEPARATING_LINE, ["Moon", 1737]]
     expected = "\n".join(
@@ -2680,60 +2765,72 @@ def test_colalign_multi_with_sep_line():
     expected = "  one  two\n\nthree  four"
     assert_equal(expected, result)
 
+
 def test_column_global_and_specific_alignment():
-    """ Test `colglobalalign` and `"global"` parameter for `colalign`. """
-    table = [[1,2,3,4],[111,222,333,444]]
-    colglobalalign = 'center'
-    colalign = ('global','left', 'right')
+    """Test `colglobalalign` and `"global"` parameter for `colalign`."""
+    table = [[1, 2, 3, 4], [111, 222, 333, 444]]
+    colglobalalign = "center"
+    colalign = ("global", "left", "right")
     result = tabulate(table, colglobalalign=colglobalalign, colalign=colalign)
-    expected = '\n'.join([
-        "---  ---  ---  ---",
-        " 1   2      3   4",
-        "111  222  333  444",
-        "---  ---  ---  ---"])
+    expected = "\n".join(
+        [
+            "---  ---  ---  ---",
+            " 1   2      3   4",
+            "111  222  333  444",
+            "---  ---  ---  ---",
+        ]
+    )
     assert_equal(expected, result)
+
 
 def test_headers_global_and_specific_alignment():
-    """ Test `headersglobalalign` and `headersalign`. """
-    table = [[1,2,3,4,5,6],[111,222,333,444,555,666]]
-    colglobalalign = 'center'
-    colalign = ('left',)
-    headers = ['h', 'e', 'a', 'd', 'e', 'r']
-    headersglobalalign = 'right'
-    headersalign = ('same', 'same', 'left', 'global', 'center')
-    result = tabulate(table, headers=headers, colglobalalign=colglobalalign, colalign=colalign, headersglobalalign=headersglobalalign, headersalign=headersalign)
-    expected = '\n'.join([
-        "h     e   a      d   e     r",
-        "---  ---  ---  ---  ---  ---",
-        "1     2    3    4    5    6",
-        "111  222  333  444  555  666"])
+    """Test `headersglobalalign` and `headersalign`."""
+    table = [[1, 2, 3, 4, 5, 6], [111, 222, 333, 444, 555, 666]]
+    colglobalalign = "center"
+    colalign = ("left",)
+    headers = ["h", "e", "a", "d", "e", "r"]
+    headersglobalalign = "right"
+    headersalign = ("same", "same", "left", "global", "center")
+    result = tabulate(
+        table,
+        headers=headers,
+        colglobalalign=colglobalalign,
+        colalign=colalign,
+        headersglobalalign=headersglobalalign,
+        headersalign=headersalign,
+    )
+    expected = "\n".join(
+        [
+            "h     e   a      d   e     r",
+            "---  ---  ---  ---  ---  ---",
+            "1     2    3    4    5    6",
+            "111  222  333  444  555  666",
+        ]
+    )
     assert_equal(expected, result)
+
 
 def test_colalign_or_headersalign_too_long():
-    """ Test `colalign` and `headersalign` too long. """
-    table = [[1,2],[111,222]]
-    colalign = ('global', 'left', 'center')
-    headers = ['h']
-    headersalign = ('center', 'right', 'same')
-    result = tabulate(table, headers=headers, colalign=colalign, headersalign=headersalign)
-    expected = '\n'.join([
-        "      h",
-        "---  ---",
-        "  1  2",
-        "111  222"])
+    """Test `colalign` and `headersalign` too long."""
+    table = [[1, 2], [111, 222]]
+    colalign = ("global", "left", "center")
+    headers = ["h"]
+    headersalign = ("center", "right", "same")
+    result = tabulate(
+        table, headers=headers, colalign=colalign, headersalign=headersalign
+    )
+    expected = "\n".join(["      h", "---  ---", "  1  2", "111  222"])
     assert_equal(expected, result)
 
+
 def test_warning_when_colalign_or_headersalign_is_string():
-    """ Test user warnings when `colalign` or `headersalign` is a string. """
-    table = [[1,"bar"]]
-    opt = {
-        'colalign': "center",
-        'headers': ['foo', '2'],
-        'headersalign': "center"}
-    check_warnings((tabulate, [table], opt),
-        num = 2,
-        category = UserWarning,
-        contain = "As a string")
+    """Test user warnings when `colalign` or `headersalign` is a string."""
+    table = [[1, "bar"]]
+    opt = {"colalign": "center", "headers": ["foo", "2"], "headersalign": "center"}
+    check_warnings(
+        (tabulate, [table], opt), num=2, category=UserWarning, contain="As a string"
+    )
+
 
 def test_float_conversions():
     "Output: float format parsed"
